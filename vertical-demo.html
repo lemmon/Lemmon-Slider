@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	
+	<title>Carousel With Variable Elements Widths | Lemmon jQuery</title>
+
+	<script src="jquery.js"></script>
+</head>
+
+<body>
+
+	<div class="wrap">
+		<div id="slider1" class="slider">
+			<ul>
+				<li><div style="height:200px;width:160px;background:#2aa198;"> 1</div></li>
+				<li><div style="height:250px;width:160px;background:#268bd2;"> 2</div></li>
+				<li><div style="height:100px;width:160px;background:#6c71c4;"> 3</div></li>
+				<li><div style="height:170px;width:160px;background:#d33682;"> 4</div></li>
+				<li><div style="height:300px;width:160px;background:#dc322f;"> 5</div></li>
+				<li><div style="height:200px;width:160px;background:#cb4b16;"> 6</div></li>
+				<li><div style="height:250px;width:160px;background:#b58900;"> 7</div></li>
+				<li><div style="height:100px;width:160px;background:#859900;"> 8</div></li>
+				<li><div style="height:200px;width:160px;background:#2aa198;"> 9</div></li>
+				<li><div style="height:250px;width:160px;background:#268bd2;">10</div></li>
+				<li><div style="height:100px;width:160px;background:#6c71c4;">11</div></li>
+				<li><div style="height:170px;width:160px;background:#d33682;">12</div></li>
+				<li><div style="height:300px;width:160px;background:#dc322f;">13</div></li>
+				<li><div style="height:200px;width:160px;background:#cb4b16;">14</div></li>
+				<li><div style="height:250px;width:160px;background:#b58900;">15</div></li>
+				<li><div style="height:100px;width:160px;background:#859900;">16</div></li>
+			</ul>
+		</div>
+		<div class="controls">
+			<a href="#" class="prev-page">Prev Page</a> |
+			<a href="#" class="prev-slide">Prev Slide</a> |
+			<a href="#" class="next-slide">Next Slide</a> |
+			<a href="#" class="next-page">Next Page</a>
+		</div>
+	</div>
+	
+	<script src="lemmon-slider.js"></script>
+	<script>
+	window.onload = function(){
+
+		// slider 1
+		$( '#slider1' ).lemmonSlider({
+			infinite: true,
+			vertical: true
+		});
+
+	}
+	</script>
+	<style type="text/css" media="screen">
+		.wrap { 
+			width: 160px;
+			margin:20px; 
+			background:#ffc; 
+		}
+		.slider { 
+			overflow:hidden; 
+			position:relative; 
+			height:640px; 
+		}
+		.slider ul { 
+			margin: 0; 
+			padding: 0; 
+			overflow: hidden;
+		}
+		.slider li { 
+			list-style:none; 
+			margin:0 5px 0 0; 
+		}
+		.slider li { 
+			text-align:center; 
+			font-size:25px; 
+		}
+	</style>	
+
+</body>
+</html>
