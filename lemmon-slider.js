@@ -4,7 +4,7 @@
  *
  * Examples and documentation at: http://jquery.lemmonjuice.com/plugins/slider-variable-widths.php
  *
- * Copyright (c) 2011 Jakub Pel‡k <jpelak@gmail.com>
+ * Copyright (c) 2011 Jakub Pelï¿½k <jpelak@gmail.com>
  *
  * Version: 0.2.1 (1/8/2012)
  * Requires: jQuery v1.4+
@@ -335,6 +335,7 @@
 		'slider'      : '> *:first',
 		// since 0.2
 		'infinite'    : false,
+		// since 0.2.1
 		'controls' : '.controls',
 		'vertical' : false
 	}
