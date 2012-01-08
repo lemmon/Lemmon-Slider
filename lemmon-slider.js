@@ -1,19 +1,32 @@
 /*
  * Lemmon Slider - jQuery Plugin
- * Simple and lightweight slider/carousel supporting variable elements/images widths.
+ * Simple and lightweight slider/carousel supporting variable elements/images dimensions.
  *
  * Examples and documentation at: http://jquery.lemmonjuice.com/plugins/slider-variable-widths.php
  *
- * Copyright (c) 2011 Jakub Pelák <jpelak@gmail.com>
+ * Copyright (c) 2011 Jakub Pel�k <jpelak@gmail.com>
  *
- * Version: 0.2 (9/6/2011)
+ * Version: 0.2.1 (1/8/2012)
  * Requires: jQuery v1.4+
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
+ *
+ * Modified By: William O'Dell <william.s.odell@gmail.com>
  */
 (function( $ ){
+	function Func(obj, method, parameters) {
+		return obj[method].apply(obj, parameters);
+	}
+
+	function Prop(obj, property, value) {
+		if (value == undefined) {
+			return obj[property];
+		} else {
+			return obj[property] = value;
+		}
+	}
 
 	var _css = {};
 
@@ -22,38 +35,56 @@
 		// Initialzie plugin
 		//
 		init : function( options ){
-			
-			var options = $.extend( {}, $.fn.lemmonSlider.defaults, options );
+			options = $.extend( {}, $.fn.lemmonSlider.defaults, options );
 			
 			return this.each(function(){
 				
 				var $slider = $( this ),
-				    data = $slider.data( 'slider' );
+					data = $slider.data( 'slider' );
 				
 				if ( ! data ){
-					
 					var $sliderContainer = $slider.find( options.slider ),
-					    $sliderControls = $slider.next().filter( '.controls' ),
-					    $items = $sliderContainer.find( options.items ),
-					    originalWidth = 1;
+						$sliderControls = $( options.controls ),
+						$items = $sliderContainer.find( options.items ),
+						originalDimension = 1;
 
-					$items.each(function(){ originalWidth += $( this ).outerWidth( true ) });
-					$sliderContainer.width( originalWidth );
+					var dimensionData = {
+						outer: "outerWidth",
+						dimension: "width",
+						position: "left",
+						padding: "padding-right",
+						scroll: "scrollLeft"
+					};
 					
+					if (options.vertical) {
+						dimensionData = {
+							outer: "outerHeight",
+							dimension: "height",
+							position: "top",
+							padding: "padding-bottom",
+							scroll: "scrollTop"
+						};
+					}
+
+					$items.each(function(){
+						originalDimension += Func($( this ), dimensionData['outer'], [true]);
+					});
+
+					Func($sliderContainer, dimensionData['dimension'], [originalDimension]);
+
 					// slide to last item
-					if ( options.slideToLast ) $sliderContainer.css( 'padding-right', $slider.width() );
+					if ( options.slideToLast ) $sliderContainer.css( dimensionData['padding'], Func($slider, dimensionData['dimension']) );
 
 					// infinite carousel
 					if ( options.infinite ){
-
-						originalWidth = originalWidth * 3;
-						$sliderContainer.width( originalWidth );
+						originalDimension = originalDimension * 3;
 						
+						Func($sliderContainer, dimensionData['dimension'], [originalDimension]);
+
 						$items.clone().addClass( '-after' ).insertAfter( $items.filter(':last') );
 						$items.filter( ':first' ).before( $items.clone().addClass('-before') );
 
-					    $items = $sliderContainer.find( options.items );
-
+						$items = $sliderContainer.find( options.items );
 					}
 					
 					$slider.items = $items;
@@ -64,45 +95,43 @@
 
 					// attach events
 					$slider.bind( 'nextSlide', function( e, t ){
-
-						var scroll = $slider.scrollLeft();
-						var x = 0;
+						var scroll = Func($slider, dimensionData['scroll']);
+						var loc = 0;
 						var slide = 0;
 
 						$items.each(function( i ){
-							if ( x == 0 && $( this ).position().left > 1 ){
-								x = $( this ).position().left;
+							if ( loc == 0 && Prop($( this ).position(), dimensionData['position']) > 1 ){
+								loc = Prop($( this ).position(), dimensionData['position']);
 								slide = i;
 							}
 						});
 
-						if ( x > 0 && $sliderContainer.outerWidth() - scroll - $slider.width() > 0 ){
-							slideTo( e, $slider, scroll+x, slide, 'fast' );
+						if ( loc > 0 && Func($sliderContainer, dimensionData['outer']) - scroll - Func($slider, dimensionData['dimension']) > 0 ){
+							slideTo( e, $slider, scroll + loc, slide, 'fast' );
 						} else if ( options.loop ){
 							// return to first
 							slideTo( e, $slider, 0, 0, 'slow' );
 						}
-
 					});
-					$slider.bind( 'prevSlide', function( e, t ){
 
-						var scroll = $slider.scrollLeft();
-						var x = 0;
+					$slider.bind( 'prevSlide', function( e, t ){
+						var scroll = Func($slider, dimensionData['scroll']);
+						var loc = 0;
 						var slide = 0;
 
 						$items.each(function( i ){
-							if ( $( this ).position().left < 0 ){
-								x = $( this ).position().left;
+							if ( Prop($( this ).position(), dimensionData['position']) < 0 ){
+								loc = Prop($( this ).position(), dimensionData['position']);
 								slide = i;
 							}
 						});
 
-						if ( x ){
-							slideTo( e, $slider, scroll+x, slide, 'fast' )
+						if ( loc ){
+							slideTo( e, $slider, scroll + loc, slide, 'fast' )
 						} else if ( options.loop ){
 							// return to last
-							var a = $sliderContainer.outerWidth() - $slider.width();
-							var b = $items.filter( ':last' ).position().left;
+							var a = Func($sliderContainer, dimensionData['outer']) - Func($slider, dimensionData['dimension']);
+							var b = Prop($items.filter( ':last' ).position(), dimensionData['position']);
 							slide = $items.size() - 1;
 							if ( a > b ){
 								slideTo( e, $slider, b, slide, 'fast' );
@@ -110,70 +139,71 @@
 								slideTo( e, $slider, a, slide, 'fast' );
 							}
 						}
-
 					});
+
 					$slider.bind( 'nextPage', function( e, t ){
 
-						var scroll = $slider.scrollLeft();
-						var w = $slider.width();
-						var x = 0;
+						var scroll = Func($slider, dimensionData['scroll']);
+						var dimension = Func($slider, dimensionData['dimension']);
+						var loc = 0;
 						var slide = 0;
 
 						$items.each(function( i ){
-							if ( $( this ).position().left < w ){
-								x = $( this ).position().left;
+							if ( Prop($( this ).position(), dimensionData['position']) < dimension ){
+								loc = Prop($( this ).position(), dimensionData['position']);
 								slide = i;
 							}
 						});
 
-						if ( x > 0 && scroll + w < originalWidth ){
-							slideTo( e, $slider, scroll+x, slide, 'slow' );
+						if ( loc > 0 && scroll + dimension < originalDimension ){
+							slideTo( e, $slider, scroll + loc, slide, 'slow' );
 						} else if ( options.loop ){
 							// return to first
 							slideTo( e, $slider, 0, 0, 'slow' );
 						}
-
 					});
+					
 					$slider.bind( 'prevPage', function( e, t ){
-
-						var scroll = $slider.scrollLeft();
-						var w = $slider.width();
-						var x = 0;
+						var scroll = Func($slider, dimensionData['scroll']);
+						var dimension = Func($slider, dimensionData['dimension']);
+						var loc = 0;
 
 						$items.each(function( i ){
-							if ( $( this ).position().left < 1 - w ){
-								x = $( this ).next().position().left;
+							if ( Prop($( this ).position(), dimensionData['position']) < 1 - dimension ){
+								loc = Prop($( this ).next().position(), dimensionData['position']);
 								slide = i;
 							}
 						});
 
 						if ( scroll ){
-							if ( x == 0 ){
+							if ( loc == 0 ){
 								//$slider.animate({ 'scrollLeft' : 0 }, 'slow' );
 								slideTo( e, $slider, 0, 0, 'slow' );
 							} else {
-								//$slider.animate({ 'scrollLeft' : scroll + x }, 'slow' );
-								slideTo( e, $slider, scroll+x, slide, 'slow' );
+								//$slider.animate({ 'scrollLeft' : scroll + loc }, 'slow' );
+								slideTo( e, $slider, scroll + loc, slide, 'slow' );
 							}
 						} else if ( options.loop ) {
 							// return to last
-							var a = $sliderContainer.outerWidth() - $slider.width();
-							var b = $items.filter( ':last' ).position().left;
+							var a = Func($sliderContainer, dimensionData['outer']) - Func($slider, dimensionData['dimension']);
+							var b = Prop($items.filter( ':last' ).position(), dimensionData['position']);
+
+							var animConfig = {};
+
 							if ( a > b ){
-								$slider.animate({ 'scrollLeft' : b }, 'slow' );
+								animConfig[dimensionData['scroll']] = b;
 							} else {
-								$slider.animate({ 'scrollLeft' : a }, 'slow' );
+								animConfig[dimensionData['scroll']] = a;
 							}
+							$slider.animate(animConfig, 'slow');
 						}
-
 					});
-					$slider.bind( 'slideTo', function( e, i, t ){
 
+					$slider.bind( 'slideTo', function( e, i, t ){
 						slideTo(
 							e, $slider,
-							$slider.scrollLeft() + $items.filter( ':eq(' + i +')' ).position().left,
+							Func($slider, dimensionData['scroll']) + Prop($items.filter( 'li:eq(' + i +')' ).position(), dimensionData['position']),
 							i, t );
-
 					});
 
 					// controls
@@ -181,41 +211,38 @@
 						$slider.trigger( 'nextSlide' );
 						return false;
 					});
+
 					$sliderControls.find( '.prev-slide' ).click(function(){
 						$slider.trigger( 'prevSlide' );
 						return false;
 					});
+
 					$sliderControls.find( '.next-page' ).click(function(){
 						$slider.trigger( 'nextPage' );
 						return false;
 					});
+					
 					$sliderControls.find( '.prev-page' ).click(function(){
 						$slider.trigger( 'prevPage' );
 						return false;
 					});
 
-					//if ( typeof $slider.options.create == 'function' ) $slider.options.create();
-					
 					$slider.data( 'slider', {
 						'target'  : $slider,
-						'options' : options
-					})
-
+						'options' : options,
+						'dimensionData' : dimensionData
+					});
 				}
-
 			});
-			
 		},
 		//
 		// Destroy plugin
 		//
 		destroy : function(){
-			
 			return this.each(function(){
-				
 				var $slider = $( this ),
-				    $sliderControls = $slider.next().filter( '.controls' ),
-				    data = $slider.data( 'slider' );
+				$sliderControls = $( options.controls ),
+				data = $slider.data( 'slider' );
 				
 				$slider.unbind( 'nextSlide' );
 				$slider.unbind( 'prevSlide' );
@@ -229,18 +256,14 @@
 				$sliderControls.find( '.next-page' ).unbind( 'click' );
 				
 				$slider.removeData( 'slider' );
-				
 			});
-			
 		}
-		//
-		//
-		//
 	}
 	//
 	// Private functions
 	//
-	function slideTo( e, $slider, x, i, t ){
+	function slideTo( e, $slider, loc, i, t ){
+		var data = $slider.data( 'slider' );
 		
 		$slider.items.filter( 'li:eq(' + i + ')' ).addClass( 'active' ).siblings( '.active' ).removeClass( 'active' );
 		
@@ -248,34 +271,35 @@
 			t = 'fast';
 		}
 		if ( t ){
-			$slider.animate({ 'scrollLeft' : x }, t, function(){
+			var animConfig = {};
+
+			animConfig[data['dimensionData']['scroll']] = loc;
+
+			$slider.animate(animConfig, t, function(){
 				checkInfinite( $slider );
 			});
 		} else {
-			var time = 0;
-			$slider.scrollLeft( x );
+			Func($slider, data['dimensionData']['scroll'],[loc]);
 			checkInfinite( $slider );
 		}
-		
-		//if ( typeof $slider.options.slide == 'function' ) $slider.options.slide( e, i, time );
-		
 	}
 	function checkInfinite( $slider ){
+		var data = $slider.data( 'slider' ), i;
 		
 		var $active = $slider.items.filter( '.active' );
 		if ( $active.hasClass( '-before' ) ){
 
-			var i = $active.prevAll().size();
+			i = $active.prevAll().size();
 			$active.removeClass( 'active' );
 			$active = $slider.items.filter( ':not(.-before):eq(' + i + ')' ).addClass( 'active' );
-			$slider.scrollLeft( $slider.scrollLeft() + $active.position().left );
+			Func($slider, data['dimensionData']['scroll'], [Func($slider, data['dimensionData']['scroll']) + Prop($active.position(), data['dimensionData']['position'])] );
 
 		} else if ( $active.hasClass( '-after' ) ){
 
-			var i = $active.prevAll( '.-after' ).size();
+			i = $active.prevAll( '.-after' ).size();
 			$active.removeClass( 'active' );
 			$active = $slider.items.filter( ':not(.-before):eq(' + i + ')' ).addClass( 'active' );
-			$slider.scrollLeft( $slider.scrollLeft() + $active.position().left );
+			Func($slider, data['dimensionData']['scroll'], [Func($slider, data['dimensionData']['scroll']) + Prop($active.position(), data['dimensionData']['position'])] );
 			
 		}
 		
@@ -310,8 +334,9 @@
 		'slideToLast' : false,
 		'slider'      : '> *:first',
 		// since 0.2
-		'infinite'    : false
-		
+		'infinite'    : false,
+		// since 0.2.1
+		'controls' : '.controls',
+		'vertical' : false
 	}
-
 })( jQuery );
