@@ -12,7 +12,7 @@
 
 	<meta name="robots" content="index, follow">
 	
-	<script src="http://static.lemmonjuice.com/public/jquery/jquery-1.6.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 </head>
 
 <body>
@@ -44,6 +44,8 @@
 			<a href="#" class="next-slide">Next Slide</a> |
 			<a href="#" class="next-page">Next Page</a>
 		</div>
+		<div id="info">
+		</div>
 	</div>
 	
 	<script src="lemmon-slider.js"></script>
@@ -54,7 +56,15 @@
 		$( '#slider1' ).lemmonSlider({
 			infinite: true
 		});
-		alert('OK');
+		
+		// prepopulate info box
+		$("#info").text($("#slider1").data("index1") + " / " + $("#slider1").data("total"))
+		
+		$(".controls a").bind("click", function(){
+			// update info box on click
+			$("#info").text($("#slider1").data("index1") + " / " + $("#slider1").data("total"))
+		})
+		// alert('OK');
 
 	}
 	</script>

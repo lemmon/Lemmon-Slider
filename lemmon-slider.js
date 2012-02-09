@@ -29,13 +29,17 @@
 				
 				var $slider = $( this ),
 				    data = $slider.data( 'slider' );
-				
+								
 				if ( ! data ){
 					
 					var $sliderContainer = $slider.find( options.slider ),
 					    $sliderControls = $slider.next().filter( '.controls' ),
 					    $items = $sliderContainer.find( options.items ),
 					    originalWidth = 1;
+
+					$slider.data("index0", 0)
+						.data("index1", 1)
+						.data("total", $sliderContainer.find( options.items ).length )
 
 					$items.each(function(){ originalWidth += $( this ).outerWidth( true ) });
 					$sliderContainer.width( originalWidth );
@@ -243,6 +247,10 @@
 	function slideTo( e, $slider, x, i, t ){
 		
 		$slider.items.filter( 'li:eq(' + i + ')' ).addClass( 'active' ).siblings( '.active' ).removeClass( 'active' );
+		
+		var total = $slider.data("total")
+		$slider.data("index0", i % total)
+		$slider.data("index1", (i % total) + 1)
 		
 		if ( typeof t == 'undefined' ){
 			t = 'fast';
