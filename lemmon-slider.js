@@ -9,9 +9,8 @@
  * Version: 0.2 (9/6/2011)
  * Requires: jQuery v1.4+
  *
- * Dual licensed under the MIT and GPL licenses:
+ * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
  */
 (function( $ ){
 

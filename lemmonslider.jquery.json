@@ -1,0 +1,29 @@
+{
+	"name": "lemmon-slider",
+	"title": "Lemmon Slider",
+	"description": "Lightweight carousel supporting variable slides/images widths.",
+	"keywords": [
+		"slider",
+		"carousel",
+		"slideshow",
+		"image",
+		"content",
+		"scroll",
+		"ui"
+	],
+	"version": "2.0.0",
+	"author": {
+		"name": "Jakub Pelák",
+		"url": "http://www.lemmonjuice.com"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://www.opensource.org/licenses/mit-license.php"
+		}
+	],
+	"homepage": "http://jquery.lemmonjuice.com/plugins/slider-variable-widths.php",
+	"demo": "http://jquery.lemmonjuice.com/plugins/slider-variable-widths.php",
+	"download": "https://github.com/lemmon/Lemmon-Slider/archive/master.zip",
+	"dependencies": { "jquery": ">=1.4.0" }
+}
