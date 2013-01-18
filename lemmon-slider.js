@@ -20,9 +20,9 @@
 		//
 		// Initialzie plugin
 		//
-		init : function( options ){
+		init : function(options){
 			
-			var options = $.extend( {}, $.fn.lemmonSlider.defaults, options );
+			var options = $.extend({}, $.fn.lemmonSlider.defaults, options);
 			
 			return this.each(function(){
 				
@@ -31,12 +31,12 @@
 				
 				if ( ! data ){
 					
-					var $sliderContainer = $slider.find( options.slider ),
-					    $sliderControls = $slider.next().filter( '.controls' ),
+					var $sliderContainer = $slider.find(options.slider),
+					    $sliderControls = $slider.next().filter('.controls'),
 					    $items = $sliderContainer.find( options.items ),
 					    originalWidth = 1;
 
-					$items.each(function(){ originalWidth += $( this ).outerWidth( true ) });
+					$items.each(function(){ originalWidth += $(this).outerWidth(true) });
 					$sliderContainer.width( originalWidth );
 					
 					// slide to last item
