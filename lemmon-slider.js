@@ -21,16 +21,16 @@
 		// Initialzie plugin
 		//
 		init : function(options){
-			
+
 			var options = $.extend({}, $.fn.lemmonSlider.defaults, options);
-			
+
 			return this.each(function(){
-				
+
 				var $slider = $( this ),
 				    data = $slider.data( 'slider' );
-				
+
 				if ( ! data ){
-					
+
 					var $sliderContainer = $slider.find(options.slider),
 					    $sliderControls = $slider.next().filter('.controls'),
 					    $items = $sliderContainer.find( options.items ),
@@ -38,26 +38,27 @@
 
 					$items.each(function(){ originalWidth += $(this).outerWidth(true) });
 					$sliderContainer.width( originalWidth );
-					
+
 					// slide to last item
 					if ( options.slideToLast ) $sliderContainer.css( 'padding-right', $slider.width() );
 
 					// infinite carousel
 					if ( options.infinite ){
+						$slider.attr('data-slider-infinite',true)
 
 						originalWidth = originalWidth * 3;
 						$sliderContainer.width( originalWidth );
-						
+
 						$items.clone().addClass( '-after' ).insertAfter( $items.filter(':last') );
 						$items.filter( ':first' ).before( $items.clone().addClass('-before') );
 
 					    $items = $sliderContainer.find( options.items );
 
 					}
-					
+
 					$slider.items = $items;
 					$slider.options = options;
-					
+
 					// first item
 					//$items.filter( ':first' ).addClass( 'active' );
 
@@ -194,7 +195,7 @@
 					});
 
 					//if ( typeof $slider.options.create == 'function' ) $slider.options.create();
-					
+
 					$slider.data( 'slider', {
 						'target'  : $slider,
 						'options' : options
@@ -203,34 +204,40 @@
 				}
 
 			});
-			
+
 		},
 		//
 		// Destroy plugin
 		//
 		destroy : function(){
-			
+
 			return this.each(function(){
-				
+
 				var $slider = $( this ),
 				    $sliderControls = $slider.next().filter( '.controls' ),
+				    $items = $slider.find('> *:first > *'),
 				    data = $slider.data( 'slider' );
-				
+
 				$slider.unbind( 'nextSlide' );
 				$slider.unbind( 'prevSlide' );
 				$slider.unbind( 'nextPage' );
 				$slider.unbind( 'prevPage' );
 				$slider.unbind( 'slideTo' );
-				
+
 				$sliderControls.find( '.next-slide' ).unbind( 'click' );
 				$sliderControls.find( '.prev-slide' ).unbind( 'click' );
 				$sliderControls.find( '.next-page' ).unbind( 'click' );
 				$sliderControls.find( '.next-page' ).unbind( 'click' );
-				
+
 				$slider.removeData( 'slider' );
-				
+
+				if ($slider.attr('data-slider-infinite')) {
+            $.merge($items.filter('.-before'),$items.filter('.-after')).each(function(index,item){
+                $(item).remove();
+            });
+        }
 			});
-			
+
 		}
 		//
 		//
@@ -240,9 +247,9 @@
 	// Private functions
 	//
 	function slideTo( e, $slider, x, i, t ){
-		
+
 		$slider.items.filter( 'li:eq(' + i + ')' ).addClass( 'active' ).siblings( '.active' ).removeClass( 'active' );
-		
+
 		if ( typeof t == 'undefined' ){
 			t = 'fast';
 		}
@@ -255,12 +262,12 @@
 			$slider.scrollLeft( x );
 			checkInfinite( $slider );
 		}
-		
+
 		//if ( typeof $slider.options.slide == 'function' ) $slider.options.slide( e, i, time );
-		
+
 	}
 	function checkInfinite( $slider ){
-		
+
 		var $active = $slider.items.filter( '.active' );
 		if ( $active.hasClass( '-before' ) ){
 
@@ -275,9 +282,9 @@
 			$active.removeClass( 'active' );
 			$active = $slider.items.filter( ':not(.-before):eq(' + i + ')' ).addClass( 'active' );
 			$slider.scrollLeft( $slider.scrollLeft() + $active.position().left );
-			
+
 		}
-		
+
 	}
 	//
 	// Debug
@@ -288,7 +295,7 @@
 	//
 	//
 	//
-	$.fn.lemmonSlider = function( method ){  
+	$.fn.lemmonSlider = function( method ){
 
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
@@ -303,14 +310,14 @@
 	//
 	//
 	$.fn.lemmonSlider.defaults = {
-		
+
 		'items'       : '> *',
 		'loop'        : true,
 		'slideToLast' : false,
 		'slider'      : '> *:first',
 		// since 0.2
 		'infinite'    : false
-		
+
 	}
 
 })( jQuery );
