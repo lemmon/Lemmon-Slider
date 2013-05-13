@@ -207,6 +207,28 @@
 
 		},
 		//
+    // Add Item
+    //
+    addItem : function(options){
+        var options = $.extend({}, $.fn.lemmonSlider.defaults, options);
+
+        var $slider = $( this ),
+            $sliderContainer = $slider.find(options.slider),
+            $sliderControls = $slider.next().filter('.controls'),
+            $items = $sliderContainer.find( options.items )
+
+        options.infinite = $slider.attr('data-slider-infinite')
+
+        if (!options.item) { return false }
+        methods.destroy.apply(this);
+        if (options.prepend) {
+            $sliderContainer.prepend(options.item);
+        } else {
+            $sliderContainer.append(options.item);
+        }
+        methods.init.apply( this, [options]);
+    },
+		//
 		// Destroy plugin
 		//
 		destroy : function(){
@@ -295,8 +317,8 @@
 	//
 	//
 	//
-	$.fn.lemmonSlider = function( method ){
-
+	$.fn.lemmonSlider = function( method , options ){
+		if (options == null) { options = {}; };
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
 		} else if ( typeof method === 'object' || !method ){
