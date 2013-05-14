@@ -4,14 +4,14 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-	
+
 	<title>Carousel With Variable Elements Widths | Lemmon jQuery</title>
 
 	<meta name="generator" content="TextMate http://macromates.com/">
 	<meta name="author" content="Jakub Pelák">
 
 	<meta name="robots" content="index, follow">
-	
+
 	<script src="http://static.lemmonjuice.com/public/jquery/jquery-1.6.min.js"></script>
 </head>
 
@@ -44,8 +44,46 @@
 			<a href="#" class="next-slide">Next Slide</a> |
 			<a href="#" class="next-page">Next Page</a>
 		</div>
+		<h2> Adding Items to a Slider </h2>
+		You can now add items to a slider through a method 'addItems'
+		<br>
+		<div id="slider2" class="slider">
+			<ul>
+				<li><div style="width:200px;height:160px;background:#2aa198;"> 1</div></li>
+				<li><div style="width:250px;height:160px;background:#268bd2;"> 2</div></li>
+			</ul>
+		</div>
+		<div class="controls">
+			<a href="#" class="prev-page">Prev Page</a> |
+			<a href="#" class="prev-slide">Prev Slide</a> |
+			<a href="#" class="next-slide">Next Slide</a> |
+			<a href="#" class="next-page">Next Page</a>
+		</div>
+		<br>
+		Item to add:
+		<input id="addItem2" type="text" style="width:500px;" value='<li><div style="width:100px;height:160px;background:#6c71c4;">new</div></li>'>
+		<button id="add-to-slider2">Add it!</button>
+
+		You can now also prepend items into the slider
+		<br>
+		<div id="slider3" class="slider">
+			<ul>
+				<li><div style="width:200px;height:160px;background:#2aa198;"> 1</div></li>
+				<li><div style="width:250px;height:160px;background:#268bd2;"> 2</div></li>
+			</ul>
+		</div>
+		<div class="controls">
+			<a href="#" class="prev-page">Prev Page</a> |
+			<a href="#" class="prev-slide">Prev Slide</a> |
+			<a href="#" class="next-slide">Next Slide</a> |
+			<a href="#" class="next-page">Next Page</a>
+		</div>
+		<br>
+		Item to add:
+		<input id="addItem3" type="text" style="width:500px;" value='<li><div style="width:100px;height:160px;background:#6c71c4;">new</div></li>'>
+		<button id="add-to-slider3">Prepend it!</button>
 	</div>
-	
+
 	<script src="lemmon-slider.js"></script>
 	<script>
 	window.onload = function(){
@@ -54,9 +92,21 @@
 		$( '#slider1' ).lemmonSlider({
 			infinite: true
 		});
+		$( '#slider2' ).lemmonSlider({
+			infinite: true
+		});
+		$( '#slider3' ).lemmonSlider({
+			infinite: true
+		});
 		alert('OK');
 
 	}
+	$('#add-to-slider2').click(function(){
+		$('#slider2').lemmonSlider('addItem', {item: $('input#addItem2').val()});
+	})
+	$('#add-to-slider3').click(function(){
+		$('#slider3').lemmonSlider('addItem', {item: $('input#addItem3').val(), prepend: true});
+	})
 	</script>
 	<style type="text/css" media="screen">
 	.wrap { width:640px; margin:20px; background:#ffc; }
@@ -64,7 +114,7 @@
 	body div.slider ul { margin:0; padding:0; height:160px; }
 	body div.slider li { float:left; list-style:none; margin:0 5px 0 0; }
 	body div.slider li { text-align:center; line-height:160px; font-size:25px; }
-	</style>	
+	</style>
 
 </body>
 </html>
