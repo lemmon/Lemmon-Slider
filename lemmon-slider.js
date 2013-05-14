@@ -76,7 +76,7 @@
 							}
 						});
 
-						if ( x > 0 && $sliderContainer.outerWidth() - scroll - $slider.width() > 0 ){
+						if ( x > 0 && $sliderContainer.outerWidth() - scroll - $slider.width() - 1 > 0 ){
 							slideTo( e, $slider, scroll+x, slide, 'fast' );
 						} else if ( options.loop ){
 							// return to first
@@ -126,7 +126,7 @@
 							}
 						});
 
-						if ( x > 0 && scroll + w < originalWidth ){
+						if ( x > 0 && scroll + w + 1 < originalWidth ){
 							slideTo( e, $slider, scroll+x, slide, 'slow' );
 						} else if ( options.loop ){
 							// return to first
