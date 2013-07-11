@@ -55,7 +55,12 @@
 					    $items = $sliderContainer.find( options.items );
 
 					}
-
+                    
+					// hide controls if not required
+                    if (!options.alwaysShowControls) {
+                        showHideControls( $slider );
+                    }
+					
 					$slider.items = $items;
 					$slider.options = options;
 
@@ -275,19 +280,49 @@
 		if ( typeof t == 'undefined' ){
 			t = 'fast';
 		}
+
 		if ( t ){
 			$slider.animate({ 'scrollLeft' : x }, t, function(){
 				checkInfinite( $slider );
+                if (!$slider.options.alwaysShowControls) {
+                    showHideControls( $slider );
+                }
 			});
 		} else {
 			var time = 0;
 			$slider.scrollLeft( x );
 			checkInfinite( $slider );
+            if (!$slider.options.alwaysShowControls) {
+                showHideControls( $slider );
+            }
 		}
 
 		//if ( typeof $slider.options.slide == 'function' ) $slider.options.slide( e, i, time );
 
 	}
+	
+    function showHideControls( $slider ) {
+
+		var $sliderControls = $slider.next().filter( '.controls' );
+
+        if ($slider.context.scrollLeft == 0) {
+            $sliderControls.find( '.prev-page' ).hide();
+            $sliderControls.find( '.prev-slide' ).hide();
+        } else {
+            $sliderControls.find( '.prev-page' ).show();
+            $sliderControls.find( '.prev-slide' ).show();
+        }
+
+        if (($slider.context.offsetWidth + $slider.context.scrollLeft) == $slider.context.scrollWidth) {
+            $sliderControls.find( '.next-page' ).hide();
+            $sliderControls.find( '.next-slide' ).hide();
+        } else {
+            $sliderControls.find( '.next-page' ).show();
+            $sliderControls.find( '.next-slide' ).show();
+        }
+
+    }
+	
 	function checkInfinite( $slider ){
 
 		var $active = $slider.items.filter( '.active' );
@@ -338,7 +373,8 @@
 		'slideToLast' : false,
 		'slider'      : '> *:first',
 		// since 0.2
-		'infinite'    : false
+		'infinite'    : false,
+        'alwaysShowControls': true
 
 	}
 
