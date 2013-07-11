@@ -249,7 +249,7 @@
 				$sliderControls.find( '.next-slide' ).unbind( 'click' );
 				$sliderControls.find( '.prev-slide' ).unbind( 'click' );
 				$sliderControls.find( '.next-page' ).unbind( 'click' );
-				$sliderControls.find( '.next-page' ).unbind( 'click' );
+				$sliderControls.find( '.prev-page' ).unbind( 'click' );
 
 				$slider.removeData( 'slider' );
 
