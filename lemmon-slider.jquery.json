@@ -11,7 +11,7 @@
 		"scroll",
 		"ui"
 	],
-	"version": "0.2.2",
+	"version": "0.5-alpha1",
 	"author": {
 		"name": "Jakub Pelák",
 		"url": "http://www.lemmonjuice.com"
@@ -22,8 +22,8 @@
 			"url": "http://www.opensource.org/licenses/mit-license.php"
 		}
 	],
-	"homepage": "http://jquery.lemmonjuice.com/plugins/slider-variable-widths.php",
-	"demo": "http://jquery.lemmonjuice.com/plugins/slider-variable-widths.php",
+	"homepage": "http://www.lemmonjuice.com/slider",
+	"demo": "http://www.lemmonjuice.com/slider",
 	"download": "https://github.com/lemmon/Lemmon-Slider/archive/master.zip",
 	"dependencies": { "jquery": ">=1.4.0" }
 }
