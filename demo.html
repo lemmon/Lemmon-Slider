@@ -2,15 +2,75 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Carousel With Variable Elements Widths | Lemmon jQuery</title>
+	<title>Carousel With Variable Elements Widths | Lemmon Slider</title>
 	<meta name="generator" content="TextMate http://macromates.com/">
 	<meta name="author" content="Jakub Pelák">
-	<script src="http://static.lemmonjuice.com/public/jquery/jquery-1.6.min.js"></script>
 </head>
 
 <body>
+    
+    <style>
+    .slider {
+        margin:50px;
+        max-width:800px;
+    }
+    .slider {
+        white-space:nowrap;
+        width:100%;
+        overflow:hidden;
+    }
+    .slider > * {
+        display:inline-block;
+        position:relative;
+        -webkit-transition:left .35s ease-out;
+           -moz-transition:left .35s ease-out;
+             -o-transition:left .35s ease-out;
+                transition:left .35s ease-out;
+    }
+    </style>
 
-    #TODO
+    <div class="wrap">
+        
+        <div class="slider">
+            <img src="http://dev9/placeholder.php/200x250/4caf50">
+            <img src="http://dev9/placeholder.php/400x250/2196f3">
+            <img src="http://dev9/placeholder.php/100x250/3f51b5">
+            <img src="http://dev9/placeholder.php/300x250/8bc34a">
+            <img src="http://dev9/placeholder.php/400x250/673ab7">
+            <img src="http://dev9/placeholder.php/200x250/ffc107">
+            <img src="http://dev9/placeholder.php/500x250/ffeb3b">
+            <img src="http://dev9/placeholder.php/100x250/009688">
+            <img src="http://dev9/placeholder.php/300x250/e91e63">
+            <img src="http://dev9/placeholder.php/400x250/f44336">
+            <img src="http://dev9/placeholder.php/200x250/00bcd4">
+            <img src="http://dev9/placeholder.php/400x250/9c27b0">
+            <img src="http://dev9/placeholder.php/100x250/ff9800">
+            <img src="http://dev9/placeholder.php/300x250/cddc39">
+            <img src="http://dev9/placeholder.php/400x250/03a9f4">
+            <img src="http://dev9/placeholder.php/200x250/ff5722">
+        </div>
+        <a class="prev" href="#">prev</a>
+        <a class="next" href="#">next</a>
+
+    </div>
+
+	<script src="jquery-1.11.3.min.js"></script>
+	<script src="lemmon-slider.js"></script>
+    <script>
+    $(function(){
+        $('.slider').lemmonSlider().children().click(function(){
+            $(this).trigger('slide.slider');
+        });
+        $('.prev').click(function(){
+            $('.slider').trigger('prev.slider');
+            return false;
+        });
+        $('.next').click(function(){
+            $('.slider').trigger('next.slider');
+            return false;
+        });
+    });
+    </script>
 
 </body>
 </html>

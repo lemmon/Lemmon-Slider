@@ -18,32 +18,36 @@
         o = $.extend({}, {
             // defaults
             direction: 'left',
+            loop: true,
             activeClass: 'active'
         }, o);
         return this.each(function(){
             var $slider = $(this),
-                $sliderContainer = $slider.find('.container'),
-                $slides = $sliderContainer.children(),
-                $sliderControls = $slider.find('.controls');
+                $slides = $slider.children();
             if (!$slider.data('lemmon-slider')) {
                 $slides.first().addClass(o.activeClass);
-                $sliderContainer.css(o.direction, 0);
+                $slider.css({position: 'relative'});
+                $slides.css({position: 'relative'}).css(o.direction, 0);
+                $slides.each(function(i){
+                    var $this = $(this);
+                    $this.on('slide.slider', function(){
+                        $slides.css(o.direction, $slides.first().position().left - $this.position().left);
+                        $this.addClass(o.activeClass).siblings().removeClass(o.activeClass);
+                    });
+                })
                 // next slide
                 $slider.on('next.slider', function(){
-                    var $n = $slides.filter('.active').removeClass('active').next().addClass('active');
-                    if (0 == $n.length) {
-                        $n = $slides.first().addClass('active');
-                    }
-                    $sliderContainer.css(o.direction, 0 - $n.position().left);
+                    var $slide = $slides.filter('.active').next();
+                    if (0 == $slide.length) $slide = o.loop ? $slides.first() : $slides.last();
+                    $slide.trigger('slide.slider');
                 });
                 // prev slide
                 $slider.on('prev.slider', function(){
-                    var $n = $slides.filter('.active').removeClass('active').prev().addClass('active');
-                    if (0 == $n.length) {
-                        $n = $slides.last().addClass('active');
-                    }
-                    $sliderContainer.css(o.direction, 0 - $n.position().left);
+                    var $slide = $slides.filter('.active').prev();
+                    if (0 == $slide.length) $slide = o.loop ? $slides.last() : $slides.first();
+                    $slide.trigger('slide.slider');
                 });
+                $slider.data('lemmon-slider', this);
             }
         });
     };
