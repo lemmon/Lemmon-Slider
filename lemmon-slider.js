@@ -19,6 +19,8 @@
             // defaults
             direction: 'left',
             loop: true,
+            center: true,
+            autoplay: 1000,
             activeClass: 'active'
         }, o);
         return this.each(function(){
